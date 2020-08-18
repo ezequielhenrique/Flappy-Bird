@@ -68,7 +68,13 @@ const flappyBird = {
     altura: 24,
     posX: 10,
     posY:50,
+    gravidade: 0.25,
+    velocidade: 0,
 
+    atualiza() {
+        flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade
+        flappyBird.posY = flappyBird.posY + flappyBird.velocidade
+    },
     desenha() {
         contexto.drawImage(
             sprites,
@@ -80,15 +86,77 @@ const flappyBird = {
     }
 }
 
-
-function loop() {
-    background.desenha();
-    solo.desenha();
-    flappyBird.desenha();
-
-    // flappyBird.posY = flappyBird.posY + 1
-
-    requestAnimationFrame(loop);
+const messageGetReady = {
+    spriteX: 134,
+    spriteY: 0,
+    largura: 174,
+    altura: 152,
+    posX: (canvas.width / 2) - 174 / 2,
+    posY:50,
+    
+    desenha() {
+        contexto.drawImage(
+            sprites,
+            messageGetReady.spriteX, messageGetReady.spriteY,   // Sprite X, Sprite Y - dentro do arquivo
+            messageGetReady.largura, messageGetReady.altura,  // Tamanho do recorte na sprite
+            messageGetReady.posX, messageGetReady.posY,   // Cordenadas x, y dentro do canvas
+            messageGetReady.largura, messageGetReady.altura  // Tamanho no canvas
+        );
+    }
 }
 
+//
+//  Telas
+//
+
+let telaAtiva = {};
+
+function mudaTela(novaTela) {
+    telaAtiva = novaTela;
+};
+
+const Telas = {
+    INICIO: {
+        desenha() {
+            background.desenha();
+            solo.desenha();
+            flappyBird.desenha();
+            messageGetReady.desenha();
+        },
+        click() {
+            mudaTela(Telas.JOGO)
+        },
+        atualiza() {
+
+        }
+    },
+
+    JOGO: {
+        desenha() {
+            background.desenha();
+            solo.desenha();
+            flappyBird.desenha();
+        },
+        atualiza(){
+            flappyBird.atualiza();
+        }
+    }
+};
+
+
+function loop() {
+    telaAtiva.desenha();
+    telaAtiva.atualiza();
+
+    requestAnimationFrame(loop);
+
+}
+
+window.addEventListener('click', function(){
+    if(telaAtiva.click){
+        telaAtiva.click();
+    }
+});
+
+mudaTela(Telas.INICIO)
 loop();
