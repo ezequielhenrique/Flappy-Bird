@@ -1,11 +1,14 @@
-console.log('Flappy Bird');
-
 let frames = 0;
+
 const som_HIT = new Audio();
-som_HIT.src = './efeitos/hit.wav'
+const som_CAIU = new Audio();
+const som_PULO = new Audio();
+som_HIT.src = './assets/audios/hit.wav'
+som_CAIU.src = './assets/audios/caiu.wav'
+som_PULO.src = './assets/audios/pulo.wav'
 
 const sprites = new Image();
-sprites.src = './sprites.png';
+sprites.src = './assets/images/sprites.png';
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
@@ -97,13 +100,13 @@ function criaFlappyBird() {
         altura: 24,
         posX: 10,
         posY: 50,
-        pulo: 4.0,
+        pulo: 2.0,
         
         pula() {
             flappyBird.velocidade = - flappyBird.pulo;
         },
     
-        gravidade: 0.20,
+        gravidade: 0.1,
         velocidade: 0,
     
         atualiza() {
